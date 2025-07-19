@@ -271,11 +271,14 @@
   user-select: none;
 }
 
-.blurred .reveal-button {
-  filter: none;
-  pointer-events: auto;
-  user-select: auto;
+.blurred {
+  filter: blur(10px);
+  pointer-events: none;
+  user-select: none;
 }
+
+
+
 
 .reveal-button {
   margin-top: 12px;
