@@ -236,28 +236,46 @@ const isNSFW = (manga) => {
   <>
     <h3 className="subtitle">🎯 Your Lucky Manga!</h3>
     <div className="lucky-card-container">
-      <div className={`lucky-card ${isNSFW(luckyManga) && !isRevealed ? "blurred" : ""}`}>
-        <div className="lucky-banner">🍀 Lucky Pick!</div>
-        <img
-          src={luckyManga.images.jpg.image_url}
-          alt={luckyManga.title}
-          className="lucky-image"
-        />
-        <p className="lucky-title">{luckyManga.title}</p>
-        {luckyManga.score && (
-          <p className="lucky-score">⭐ MAL Score: {luckyManga.score}</p>
-        )}
-      </div>
+      {(!isNSFW(luckyManga) || isRevealed) ? (
+        <Link to={`/manga/${luckyManga.mal_id}`} className="lucky-card">
+          <div>
+            <div className="lucky-banner">🍀 Lucky Pick!</div>
+            <img
+              src={luckyManga.images.jpg.image_url}
+              alt={luckyManga.title}
+              className="lucky-image"
+            />
+            <p className="lucky-title">{luckyManga.title}</p>
+            {luckyManga.score && (
+              <p className="lucky-score">⭐ MAL Score: {luckyManga.score}</p>
+            )}
+          </div>
+        </Link>
+      ) : (
+        <div className="lucky-card blurred">
+          <div className="lucky-banner">🍀 Lucky Pick!</div>
+          <img
+            src={luckyManga.images.jpg.image_url}
+            alt={luckyManga.title}
+            className="lucky-image"
+          />
+          <p className="lucky-title">{luckyManga.title}</p>
+          {luckyManga.score && (
+            <p className="lucky-score">⭐ MAL Score: {luckyManga.score}</p>
+          )}
+        </div>
+      )}
 
-      {/* Reveal button outside the blurred card */}
       {isNSFW(luckyManga) && !isRevealed && (
         <button className="reveal-button" onClick={() => setIsRevealed(true)}>
-          Warning! NSFW Content, Click to Proceed 🔞
+          Reveal NSFW Content 🔞
         </button>
       )}
     </div>
   </>
 )}
+
+
 
 
 
