@@ -11,6 +11,8 @@ function Users() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAll, setShowAll] = useState(false);
+  const token = localStorage.getItem("token");
+  const isLoggedIn = !!token;
 
   // Fetch all users + current user's following list
   useEffect(() => {
@@ -153,6 +155,16 @@ function Users() {
   };
 
   const displayUsers = showAll ? users : filteredUsers;
+
+  if (!isLoggedIn) {
+  return (
+    <div className="users-container">
+      <h2 className="users-title">Find Users</h2>
+      <p>Please log in to find all users.</p>
+    </div>
+  );
+}
+
 
   if (loading) {
     return <div><h2>Find Users</h2><p>Loading...</p></div>;
