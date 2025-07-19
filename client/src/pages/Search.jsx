@@ -22,6 +22,10 @@ function Search() {
   const [loading, setLoading] = useState(false);
   const [activeSearchTerm, setActiveSearchTerm] = useState(queryParam);
 
+  const [luckyManga, setLuckyManga] = useState(null);
+  const [isRevealed, setIsRevealed] = useState(false);
+
+
 
   // Fetch genres on mount
   useEffect(() => {
@@ -88,6 +92,7 @@ const fetchManga = async (pageNum = 1, append = false, ignoreSearchTerm = false)
   // Search button handler for text input search
   const handleSearchSubmit = (e) => {
   e.preventDefault();
+  setLuckyManga(null);
   fetchManga(1, false);
   setActiveSearchTerm(searchTerm.trim());
   if (searchTerm.trim()) {
@@ -100,6 +105,7 @@ const fetchManga = async (pageNum = 1, append = false, ignoreSearchTerm = false)
 
 
 const handleFilterSearch = () => {
+  setLuckyManga(null);
   fetchManga(1, false, true); // ignore search term in fetch
   setActiveSearchTerm("");    // clear active search term since filter search ignores input
   navigate("/search");
@@ -123,11 +129,12 @@ const handleFilterSearch = () => {
   const handleFeelingLucky = async () => {
   setLoading(true);
   try {
-    const res = await axios.get("https://api.jikan.moe/v4/random/manga");
+    const res = await axios.get("https://api.jikan.moe/v4/random/manga?sfw=false");
     const manga = res.data.data;
-    if (manga && manga.mal_id) {
-      navigate(`/manga/${manga.mal_id}`);
-    }
+    setLuckyManga(manga);
+    setIsRevealed(false); // reset reveal state
+    setResults([]);
+    setActiveSearchTerm("🎲 Lucky Pick");
   } catch (err) {
     console.error("Error fetching random manga:", err);
     alert("Failed to get a random manga. Try again!");
@@ -135,6 +142,12 @@ const handleFilterSearch = () => {
     setLoading(false);
   }
 };
+
+const isNSFW = (manga) => {
+  const nsfwTags = ["Hentai", "Ecchi", "Erotica", "Adult"];
+  return manga.genres.some((genre) => nsfwTags.includes(genre.name));
+};
+
 
 
 
@@ -216,7 +229,37 @@ const handleFilterSearch = () => {
   🎲 I'm Feeling Lucky
 </button>
 
+
       </div>
+
+     {luckyManga && (
+  <>
+    <h3 className="subtitle">🎯 Your Lucky Manga!</h3>
+    <div className="lucky-card-container">
+      <div className={`lucky-card ${isNSFW(luckyManga) && !isRevealed ? "blurred" : ""}`}>
+        <div className="lucky-banner">🍀 Lucky Pick!</div>
+        <img
+          src={luckyManga.images.jpg.image_url}
+          alt={luckyManga.title}
+          className="lucky-image"
+        />
+        <p className="lucky-title">{luckyManga.title}</p>
+        {luckyManga.score && (
+          <p className="lucky-score">⭐ MAL Score: {luckyManga.score}</p>
+        )}
+      </div>
+
+      {/* Reveal button outside the blurred card */}
+      {isNSFW(luckyManga) && !isRevealed && (
+        <button className="reveal-button" onClick={() => setIsRevealed(true)}>
+          Warning! NSFW Manga, Click to Proceed 🔞
+        </button>
+      )}
+    </div>
+  </>
+)}
+
+
 
 
       {(results.length > 0 || loading) && (
