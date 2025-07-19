@@ -268,7 +268,7 @@ const isNSFW = (manga) => {
 
       {isNSFW(luckyManga) && !isRevealed && (
         <button className="reveal-button" onClick={() => setIsRevealed(true)}>
-          Reveal NSFW Content 🔞
+          Warning! NSFW Content! Click to Proceed 🔞
         </button>
       )}
     </div>
