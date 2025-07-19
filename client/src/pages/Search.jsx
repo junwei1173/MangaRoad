@@ -252,7 +252,7 @@ const isNSFW = (manga) => {
       {/* Reveal button outside the blurred card */}
       {isNSFW(luckyManga) && !isRevealed && (
         <button className="reveal-button" onClick={() => setIsRevealed(true)}>
-          Warning! NSFW Manga, Click to Proceed 🔞
+          Warning! NSFW Content, Click to Proceed 🔞
         </button>
       )}
     </div>
