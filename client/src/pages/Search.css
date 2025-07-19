@@ -187,3 +187,21 @@
   transform: translate(-2px, -2px);
   box-shadow: 4px 4px 0 black;
 }
+
+.lucky-button {
+  padding: 8px 16px;
+  border: 2px solid black;
+  
+  background-color: #ff9500;
+  color: white;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 8px 8px 8px 8px;
+  box-shadow: 2px 2px 0 black;
+}
+
+.lucky-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 black;
+}
+
