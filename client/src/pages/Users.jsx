@@ -214,7 +214,7 @@ function Users() {
         {displayUsers.map((user) => (
           <div key={user._id} className="user-card">
             <div>
-              <Link to={`/profile/${user._id}`} className="user-name">
+              <Link to={`/user/${user._id}`} className="user-name">
                 {user.username || "[No Username]"}
               </Link>
               <div className="user-stats">
