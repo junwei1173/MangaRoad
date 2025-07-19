@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Anton&display=swap');
+
+
+.profile-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Bangers', cursive;
+  background: transparent;
+  color: black;
+}
+
+
+.profile-section > h2 {
+  font-family: 'Anton', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  border-bottom: 3px solid black;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+
+.manga-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+
+.manga-card {
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 4px 4px 0 black;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+  font-family: 'Anton', sans-serif;
+}
+
+
+.manga-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 black;
+}
+
+
+.manga-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+
+.manga-link {
+  display: block;
+  padding: 0.5rem;
+  color: black;
+  font-size: 1rem;
+  text-decoration: none;
+  font-family: 'Anton', sans-serif;
+}
+
+.manga-link:hover {
+  color: #f1920cf5; 
+  text-shadow: 2px 2px 0 black;
+}
+
+
+.manga-card button {
+  margin: 8px auto 10px;
+  display: block;
+  background-color: #ffcc00;
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: 'Bangers', cursive;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 black;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.manga-card button:hover {
+  background-color: #ffe066;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 black;
+}
+
+
+.recommendation-reason {
+  font-style: italic;
+  color: #666;
+  margin-bottom: 1rem;
+  font-family: 'Bangers', cursive;
+}
+
+
+.user-list {
+  list-style: none;
+  padding: 0;
+  font-family: 'Anton', sans-serif;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 6px;
+}
+
+.user-item a {
+  color: #f1920cf5;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.user-item a:hover {
+  text-decoration: underline;
+  text-shadow: 1px 1px 0 black;
+}
+
+.user-item button {
+  background-color: #ffcc00;
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: 'Bangers', cursive;
+  box-shadow: 2px 2px 0 black;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.user-item button:hover {
+  background-color: #ffe066;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 black;
+}

@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Anton&display=swap');
+
+.home-container {
+  padding: 2rem;
+  font-family: 'Bangers', cursive;
+  background: transparent;
+}
+
+.home-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.manga-title {
+  font-family: 'Anton', sans-serif;
+  color: #ff0055;
+  text-shadow: 2px 2px 0 black;
+}
+
+.username {
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 8px 0 0 8px;
+  width: 250px;
+  font-family: inherit;
+}
+
+.search-button {
+  padding: 10px 20px;
+  border: 2px solid black;
+  border-left: none;
+  background-color: #ffcc00;
+  border-radius: 0 8px 8px 0;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 black;
+}
+
+.search-button:hover {
+  background-color: #ffe066;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 black;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  border-bottom: 3px solid black;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.trending-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+.manga-card {
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 4px 4px 0 black;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+
+.manga-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 black;
+}
+
+.manga-card a {
+  text-decoration: none;
+  color: inherit; 
+}
+
+.manga-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.manga-title-text {
+  font-size: 1rem;
+  padding: 0.5rem;
+  color: black;
+}
+
+.orange-text {
+  color: #f1920cf5; 
+}
+
+.highlighted-title {
+  color: #ff9500;
+  text-shadow: 2px 2px 0 black;
+}

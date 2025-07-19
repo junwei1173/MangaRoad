@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Anton&display=swap');
+
+.users-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Bangers', cursive;
+  background: transparent;
+  color: black;
+}
+
+.users-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border-bottom: 3px solid black;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+
+.search-input {
+  flex: 1;
+  max-width: 400px;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  box-shadow: 4px 4px 0 black;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #f1920cf5;
+  box-shadow: 4px 4px 0 black, 0 0 5px #ff0055;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #ffcc00;
+  border: 2px solid black;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Bangers', cursive;
+  font-size: 1rem;
+  box-shadow: 4px 4px 0 black;
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+}
+
+.button:hover {
+  background-color: #ffe066;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 black;
+}
+
+.clear-button {
+  background-color: #6c757d;
+}
+
+.clear-button:hover {
+  background-color: #5a6268;
+}
+
+
+.users-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+
+.user-card {
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 4px 4px 0 black;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Anton', sans-serif;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.user-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 black;
+}
+
+
+.user-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #f1920cf5;
+  text-decoration: none;
+  text-shadow: 2px 2px 0 black;
+}
+
+.user-name:hover {
+  text-decoration: underline;
+}
+
+
+.user-stats {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 6px;
+  font-family: 'Bangers', cursive;
+  user-select: none;
+}
+
+
+.follow-button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 2px solid black;
+  font-family: 'Bangers', cursive;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 black;
+  user-select: none;
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  color: white;
+}
+
+.follow-button.follow {
+  background-color: #007bff;
+}
+
+.follow-button.follow:hover {
+  background-color: #339cff;
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 black;
+}
+
+.follow-button.unfollow {
+  background-color: #dc3545;
+}
+
+.follow-button.unfollow:hover {
+  background-color: #e55a62;
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 black;
+}

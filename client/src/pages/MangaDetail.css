@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Anton&display=swap');
+
+.detail-container {
+  padding: 2rem;
+  font-family: 'Bangers', cursive;
+  color: #333;
+}
+
+.manga-detail-card {
+  max-width: 700px;
+  margin: auto;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 6px 6px 0 black;
+}
+
+.detail-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 0 black;
+  color: #f1920cf5;
+  font-family: 'Anton', sans-serif;
+  text-align: center;
+}
+
+.detail-image {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.bookmark-button {
+  background-color: #ffe066;
+  border: 2px solid black;
+  padding: 10px 20px;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 black;
+  margin-bottom: 16px;
+}
+
+.bookmark-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 black;
+}
+
+
+.rating-section {
+  margin-top: 20px;
+}
+
+.star-button {
+  background-color: #ddd;
+  border: 2px solid black;
+  padding: 7px 15px;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 100px;
+  box-shadow: 3px 3px 0 black;
+  margin-bottom: 16px;
+}
+
+.star-button.filled {
+  background-color: #ffd700;
+}
+
+.star-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 black;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-family: inherit;
+  border: 2px solid black;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.rating-actions {
+  margin-top: 10px;
+}
+
+.submit-button {
+  background-color: #00c853;
+  color: white;
+  border: 2px solid black;
+  padding: 10px 20px;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 black;
+  margin-bottom: 16px;
+}
+
+.submit-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 black;
+}
+
+.remove-button {
+  background-color: #d32f2f;
+  color: white;
+  border: 2px solid black;
+  padding: 10px 20px;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 black;
+  margin-bottom: 16px;
+}
+
+.remove-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 black;
+}
+
+.reviews-section {
+  margin-top: 2rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.review-card {
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 4px 4px 0 black;
+  margin-bottom: 12px;
+}
+
