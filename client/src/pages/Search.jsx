@@ -120,6 +120,23 @@ const handleFilterSearch = () => {
     navigate("/search");
   };
 
+  const handleFeelingLucky = async () => {
+  setLoading(true);
+  try {
+    const res = await axios.get("https://api.jikan.moe/v4/random/manga");
+    const manga = res.data.data;
+    if (manga && manga.mal_id) {
+      navigate(`/manga/${manga.mal_id}`);
+    }
+  } catch (err) {
+    console.error("Error fetching random manga:", err);
+    alert("Failed to get a random manga. Try again!");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <div className="search-container">
@@ -190,6 +207,15 @@ const handleFilterSearch = () => {
         >
           Clear All Filters
         </button>
+
+        <button
+  onClick={handleFeelingLucky}
+  className="lucky-button"
+  type="button"
+>
+  🎲 I'm Feeling Lucky
+</button>
+
       </div>
 
 
