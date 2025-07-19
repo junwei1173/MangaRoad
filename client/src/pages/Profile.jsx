@@ -12,24 +12,32 @@ function Profile() {
   const [following, setFollowing] = useState([]);
   const [followingUsers, setFollowingUsers] = useState([]);
   const [followerUsers, setFollowerUsers] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
+  const token = localStorage.getItem("token");
+  if (!token) {
+    setIsLoggedIn(false);
+    return;
+  }
 
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/user`, {
-          headers: { "x-auth-token": token },
-        });
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/user`, {
+      headers: { "x-auth-token": token },
+    });
 
-        setBookmarks(res.data.bookmarks || []);
-        setFollowers(res.data.followers || []);
-        setFollowing(res.data.following || []);
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-      }
-    };
+    setIsLoggedIn(true);
+    setBookmarks(res.data.bookmarks || []);
+    setFollowers(res.data.followers || []);
+    setFollowing(res.data.following || []);
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    setIsLoggedIn(false);
+  }
+};
+
 
     fetchUserData();
   }, []);
@@ -143,6 +151,10 @@ function Profile() {
     fetchUsernames(following, setFollowingUsers);
     fetchUsernames(followers, setFollowerUsers);
   }, [following, followers]);
+
+  if (!isLoggedIn) {
+  return <div className="profile-container"><p>Please log in to view your profile.</p></div>;
+}
 
   return (
     <div className="profile-container">
