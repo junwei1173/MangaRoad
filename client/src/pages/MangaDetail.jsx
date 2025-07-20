@@ -15,7 +15,6 @@ function MangaDetail() {
   const [ratingsCount, setRatingsCount] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [allReviews, setAllReviews] = useState([]);
-  const [mangaDexUrl, setMangaDexUrl] = useState(null);
 
   useEffect(() => {
     const fetchManga = async () => {
@@ -150,48 +149,6 @@ function MangaDetail() {
     }
   };
 
-  useEffect(() => {
-  const fetchMangaDex = async () => {
-    try {
-      const res = await axios.get(
-        `https://api.mangadex.org/manga?title=${encodeURIComponent(manga.title)}&limit=10`
-      );
-
-      if (res.data.data && res.data.data.length > 0) {
-        // Try to match by MAL ID first
-        const matchByMal = res.data.data.find(
-          (m) => m.attributes.links && m.attributes.links.mal === manga.mal_id
-        );
-
-        // If no MAL match, try exact title match
-        const matchByTitle = res.data.data.find(
-          (m) =>
-            m.attributes.title &&
-            (m.attributes.title.en?.toLowerCase() === manga.title.toLowerCase() ||
-             m.attributes.altTitles?.some(t => t.en?.toLowerCase() === manga.title.toLowerCase()))
-        );
-
-        const finalMatch = matchByMal || matchByTitle;
-
-        if (finalMatch) {
-          setMangaDexUrl(`https://mangadex.org/title/${finalMatch.id}`);
-        } else {
-          console.log("No exact MAL or title match found in MangaDex results");
-        }
-      }
-    } catch (err) {
-      console.error("Error fetching MangaDex info:", err);
-    }
-  };
-
-  if (manga) {
-    fetchMangaDex();
-  }
-}, [manga]);
-
-
-
-
   if (loading) return <p>Loading...</p>;
   if (!manga) return <p>Manga not found.</p>;
 
@@ -213,35 +170,18 @@ function MangaDetail() {
     Official MAL Page
   </a>
 </p>
+
 <p>
   <strong>Read on MangaDex:</strong>{" "}
-  {mangaDexUrl ? (
-    <a
-      href={mangaDexUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="read-link"
-    >
-      MangaDex Page
-    </a>
-  ) : (
-    <>
-      Can't seem to find it — but you can still{" "}
-      <a
-        href={`https://mangadex.org/titles?q=${encodeURIComponent(manga.title)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="read-link"
-      >
-        search for "{manga.title}"
-      </a>{" "}
-       or you can just Google it :p
-    </>
-  )}
+  <a
+    href={`https://mangadex.org/titles?q=${encodeURIComponent(manga.title)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="read-link"
+  >
+    {manga.title}
+  </a>
 </p>
-
-
-
 
         <button onClick={handleBookmark} className="bookmark-button">
           {bookmarked ? "Remove Bookmark" : "Add Bookmark"}
