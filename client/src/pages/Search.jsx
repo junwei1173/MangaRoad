@@ -141,28 +141,37 @@ const handleFilterSearch = () => {
   if (sort === "score") params.append("order_by", "score");
   if (sort) params.append("sort", "desc");
 
-  params.append("limit", 25); // Increase pool size
-  params.append("page", 1);   // Get first page
+  params.append("limit", 25);
 
   try {
+    // STEP 1: Get total pages for the current filter
+    const countRes = await axios.get(`${baseURL}?${params.toString()}`);
+    const totalPages = countRes.data.pagination?.last_visible_page || 1;
+
+    // STEP 2: Get a random page from the available range
+    const randomPage = Math.floor(Math.random() * totalPages) + 1;
+
+    // STEP 3: Fetch random page results
+    params.set("page", randomPage);
     const res = await axios.get(`${baseURL}?${params.toString()}`);
     const filteredResults = res.data.data;
 
-    if (filteredResults.length === 0) {
+    if (!filteredResults || filteredResults.length === 0) {
       alert("No manga found for the current filter. Try different filters.");
       return;
     }
 
     const random = filteredResults[Math.floor(Math.random() * filteredResults.length)];
     setLuckyManga(random);
-    setResults([]); // clear normal search results
+    setResults([]); // clear regular search
   } catch (err) {
-    console.error("Error fetching filtered lucky manga:", err);
+    console.error("Error fetching lucky manga:", err);
     alert("Failed to get a filtered random manga. Try again!");
   } finally {
     setLoading(false);
   }
 };
+
 
 
 const isNSFW = (manga) => {
