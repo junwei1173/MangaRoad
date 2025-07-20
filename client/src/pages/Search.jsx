@@ -128,20 +128,42 @@ const handleFilterSearch = () => {
 
   const handleFeelingLucky = async () => {
   setLoading(true);
+  setLuckyManga(null);
+  setIsRevealed(false);
+  setActiveSearchTerm("🎲 Lucky Pick");
+
+  const baseURL = "https://api.jikan.moe/v4/manga";
+  const params = new URLSearchParams();
+
+  if (selectedGenre) params.append("genres", selectedGenre);
+  if (selectedYear) params.append("start_date", `${selectedYear}-01-01`);
+  if (sort === "popularity") params.append("order_by", "members");
+  if (sort === "score") params.append("order_by", "score");
+  if (sort) params.append("sort", "desc");
+
+  params.append("limit", 25); // Increase pool size
+  params.append("page", 1);   // Get first page
+
   try {
-    const res = await axios.get("https://api.jikan.moe/v4/random/manga?sfw=false");
-    const manga = res.data.data;
-    setLuckyManga(manga);
-    setIsRevealed(false); // reset reveal state
-    setResults([]);
-    setActiveSearchTerm("🎲 Lucky Pick");
+    const res = await axios.get(`${baseURL}?${params.toString()}`);
+    const filteredResults = res.data.data;
+
+    if (filteredResults.length === 0) {
+      alert("No manga found for the current filter. Try different filters.");
+      return;
+    }
+
+    const random = filteredResults[Math.floor(Math.random() * filteredResults.length)];
+    setLuckyManga(random);
+    setResults([]); // clear normal search results
   } catch (err) {
-    console.error("Error fetching random manga:", err);
-    alert("Failed to get a random manga. Try again!");
+    console.error("Error fetching filtered lucky manga:", err);
+    alert("Failed to get a filtered random manga. Try again!");
   } finally {
     setLoading(false);
   }
 };
+
 
 const isNSFW = (manga) => {
   const nsfwTags = ["Hentai", "Ecchi", "Erotica", "Adult"];
@@ -159,7 +181,7 @@ const isNSFW = (manga) => {
         <input
           type="text"
           className="search-input"
-          placeholder="Search manga by name..."
+          placeholder="Search manga by name... (filters optional)"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -210,7 +232,7 @@ const isNSFW = (manga) => {
           className="search-by-filters-button"
           type="button"
         >
-          Search by Filters
+          Search only by Filters
         </button>
 
         <button
@@ -234,7 +256,14 @@ const isNSFW = (manga) => {
 
      {luckyManga && (
   <>
-    <h3 className="subtitle">🎯 Your Lucky Manga!</h3>
+    <h3 className="subtitle">
+      🎯 Lucky Manga
+      {selectedGenre && ` (Genre: ${genres.find(g => g.mal_id === Number(selectedGenre))
+?.name})`}
+      {selectedYear && ` | Year: ${selectedYear}`}
+      {sort && ` | Sort by: ${sort === "score" ? "Score" : "Popularity"}`}
+    </h3>
+
     <div className="lucky-card-container">
       {(!isNSFW(luckyManga) || isRevealed) ? (
         <Link to={`/manga/${luckyManga.mal_id}`} className="lucky-card">
@@ -268,12 +297,13 @@ const isNSFW = (manga) => {
 
       {isNSFW(luckyManga) && !isRevealed && (
         <button className="reveal-button" onClick={() => setIsRevealed(true)}>
-          Warning! NSFW Content! Click to Proceed 🔞
+          Warning! NSFW content. Click to proceed 🔞
         </button>
       )}
     </div>
   </>
 )}
+
 
 
 
@@ -323,7 +353,7 @@ const isNSFW = (manga) => {
       )}
 
       {!loading && results.length === 0 && !searchTerm && !selectedGenre && !selectedYear && !sort && (
-        <p>Use the search bar or filters above to find manga.</p>
+        <p>Use the search bar and/or filters above to find manga. Or Find a Random manga if you feel lucky (Tip: You can use filters on it too) </p>
       )}
     </div>
   );
