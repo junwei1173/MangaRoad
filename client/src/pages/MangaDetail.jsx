@@ -165,6 +165,17 @@ function MangaDetail() {
         <p><strong>Synopsis:</strong> {manga.synopsis || "No synopsis available."}</p>
         <p><strong>Genres:</strong> {manga.genres.map((g) => g.name).join(", ")}</p>
         <p>
+          <p><strong>Author(s):</strong> {
+          manga.authors && manga.authors.length > 0 
+            ? manga.authors.map(author => author.name).join(", ")
+            : "N/A"
+        }</p>
+        <p><strong>Demographic:</strong> {
+          manga.demographics && manga.demographics.length > 0 
+            ? manga.demographics.map(demo => demo.name).join(", ")
+            : "N/A"
+        }</p>
+          
   <strong>More info:</strong>{" "}
   <a href={manga.url} target="_blank" rel="noopener noreferrer" className="read-link">
     Official MAL Page
