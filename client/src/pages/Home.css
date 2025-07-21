@@ -109,3 +109,34 @@
   color: #ff9500;
   text-shadow: 2px 2px 0 black;
 }
+
+.greeting-text {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  color: #ff6b6b;
+  text-shadow: 1px 1px #000;
+}
+
+.date-time {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 1.5rem;
+}
+
+.greeting-text {
+  font-size: 1.8rem;
+  text-align: center;
+  color: #ff8000;
+  margin-bottom: 0.2rem;
+  text-shadow: 2px 2px 0 black;
+  font-family: 'Bangers', cursive;
+}
+
+.date-time {
+  font-size: 1.1rem;
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+  font-family: 'Anton', sans-serif;
+  text-shadow: 1px 1px 0 #ccc;
+}
