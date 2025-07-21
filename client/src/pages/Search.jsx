@@ -25,8 +25,6 @@ function Search() {
   const [luckyManga, setLuckyManga] = useState(null);
   const [isRevealed, setIsRevealed] = useState(false);
 
-
-
   // Fetch genres on mount
   useEffect(() => {
     const fetchGenres = async () => {
@@ -40,77 +38,101 @@ function Search() {
     fetchGenres();
   }, []);
 
+  // Auto-search when component mounts with a query parameter
+  useEffect(() => {
+    const autoSearch = async () => {
+      if (queryParam.trim()) {
+        setLoading(true);
+        const baseURL = "https://api.jikan.moe/v4/manga";
+        const params = new URLSearchParams();
+        params.append("q", queryParam.trim());
+        params.append("limit", 7);
+        params.append("page", 1);
+
+        try {
+          const res = await axios.get(`${baseURL}?${params.toString()}`);
+          const fetched = res.data.data || [];
+          const uniqueResults = Array.from(
+            new Map(fetched.map(m => [m.mal_id, m])).values()
+          );
+          setResults(uniqueResults);
+          setHasMore(uniqueResults.length === 7);
+          setPage(1);
+          setActiveSearchTerm(queryParam.trim());
+        } catch (err) {
+          console.error("Error fetching manga:", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    autoSearch();
+  }, [queryParam]); // Only depend on queryParam
+
   // Fetch manga function, called only on explicit search
-const fetchManga = async (pageNum = 1, append = false, ignoreSearchTerm = false) => {
-  setLoading(true);
+  const fetchManga = async (pageNum = 1, append = false, ignoreSearchTerm = false) => {
+    setLoading(true);
 
-  const baseURL = "https://api.jikan.moe/v4/manga";
-  const params = new URLSearchParams();
+    const baseURL = "https://api.jikan.moe/v4/manga";
+    const params = new URLSearchParams();
 
-  // Add search term if not ignoring it
-  if (!ignoreSearchTerm && searchTerm.trim()) {
-    params.append("q", searchTerm.trim());
-  }
-
-  if (selectedGenre) params.append("genres", selectedGenre);
-  if (selectedYear) params.append("start_date", `${selectedYear}-01-01`);
-  if (sort === "popularity") params.append("order_by", "members");
-  if (sort === "score") params.append("order_by", "score");
-  if (sort) params.append("sort", "desc");
-
-  params.append("limit", 7);
-  params.append("page", pageNum);
-
-  try {
-    const res = await axios.get(`${baseURL}?${params.toString()}`);
-    const fetched = res.data.data || [];
-
-   
-    const uniqueResults = Array.from(
-      new Map(fetched.map(m => [m.mal_id, m])).values()
-    );
-
-    
-    if (append) {
-      setResults(prev => [...prev, ...uniqueResults]);
-    } else {
-      setResults(uniqueResults);
+    // Add search term if not ignoring it
+    if (!ignoreSearchTerm && searchTerm.trim()) {
+      params.append("q", searchTerm.trim());
     }
 
-    setHasMore(uniqueResults.length === 7);
-    setPage(pageNum);
-  } catch (err) {
-    console.error("Error fetching manga:", err);
-  } finally {
-    setLoading(false);
-  }
-};
+    if (selectedGenre) params.append("genres", selectedGenre);
+    if (selectedYear) params.append("start_date", `${selectedYear}-01-01`);
+    if (sort === "popularity") params.append("order_by", "members");
+    if (sort === "score") params.append("order_by", "score");
+    if (sort) params.append("sort", "desc");
 
+    params.append("limit", 7);
+    params.append("page", pageNum);
 
+    try {
+      const res = await axios.get(`${baseURL}?${params.toString()}`);
+      const fetched = res.data.data || [];
 
+      const uniqueResults = Array.from(
+        new Map(fetched.map(m => [m.mal_id, m])).values()
+      );
+
+      if (append) {
+        setResults(prev => [...prev, ...uniqueResults]);
+      } else {
+        setResults(uniqueResults);
+      }
+
+      setHasMore(uniqueResults.length === 7);
+      setPage(pageNum);
+    } catch (err) {
+      console.error("Error fetching manga:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Search button handler for text input search
   const handleSearchSubmit = (e) => {
-  e.preventDefault();
-  setLuckyManga(null);
-  fetchManga(1, false);
-  setActiveSearchTerm(searchTerm.trim());
-  if (searchTerm.trim()) {
-    navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
-  } else {
+    e.preventDefault();
+    setLuckyManga(null);
+    fetchManga(1, false);
+    setActiveSearchTerm(searchTerm.trim());
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      navigate("/search");
+    }
+  };
+
+  const handleFilterSearch = () => {
+    setLuckyManga(null);
+    fetchManga(1, false, true); // ignore search term in fetch
+    setActiveSearchTerm("");    // clear active search term since filter search ignores input
     navigate("/search");
-  }
-};
-
-
-
-const handleFilterSearch = () => {
-  setLuckyManga(null);
-  fetchManga(1, false, true); // ignore search term in fetch
-  setActiveSearchTerm("");    // clear active search term since filter search ignores input
-  navigate("/search");
-};
-
+  };
 
   // Show more results button
   const handleShowMore = () => {
@@ -127,60 +149,55 @@ const handleFilterSearch = () => {
   };
 
   const handleFeelingLucky = async () => {
-  setLoading(true);
-  setLuckyManga(null);
-  setIsRevealed(false);
-  setActiveSearchTerm("🎲 Lucky Pick");
+    setLoading(true);
+    setLuckyManga(null);
+    setIsRevealed(false);
+    setActiveSearchTerm("🎲 Lucky Pick");
 
-  const baseURL = "https://api.jikan.moe/v4/manga";
-  const params = new URLSearchParams();
+    const baseURL = "https://api.jikan.moe/v4/manga";
+    const params = new URLSearchParams();
 
-  if (selectedGenre) params.append("genres", selectedGenre);
-  if (selectedYear) params.append("start_date", `${selectedYear}-01-01`);
-  if (sort === "popularity") params.append("order_by", "members");
-  if (sort === "score") params.append("order_by", "score");
-  if (sort) params.append("sort", "desc");
+    if (selectedGenre) params.append("genres", selectedGenre);
+    if (selectedYear) params.append("start_date", `${selectedYear}-01-01`);
+    if (sort === "popularity") params.append("order_by", "members");
+    if (sort === "score") params.append("order_by", "score");
+    if (sort) params.append("sort", "desc");
 
-  params.append("limit", 25);
+    params.append("limit", 25);
 
-  try {
-    // STEP 1: Get total pages for the current filter
-    const countRes = await axios.get(`${baseURL}?${params.toString()}`);
-    const totalPages = countRes.data.pagination?.last_visible_page || 1;
+    try {
+      // STEP 1: Get total pages for the current filter
+      const countRes = await axios.get(`${baseURL}?${params.toString()}`);
+      const totalPages = countRes.data.pagination?.last_visible_page || 1;
 
-    // STEP 2: Get a random page from the available range
-    const randomPage = Math.floor(Math.random() * totalPages) + 1;
+      // STEP 2: Get a random page from the available range
+      const randomPage = Math.floor(Math.random() * totalPages) + 1;
 
-    // STEP 3: Fetch random page results
-    params.set("page", randomPage);
-    const res = await axios.get(`${baseURL}?${params.toString()}`);
-    const filteredResults = res.data.data;
+      // STEP 3: Fetch random page results
+      params.set("page", randomPage);
+      const res = await axios.get(`${baseURL}?${params.toString()}`);
+      const filteredResults = res.data.data;
 
-    if (!filteredResults || filteredResults.length === 0) {
-      alert("No manga found for the current filter. Try different filters.");
-      return;
+      if (!filteredResults || filteredResults.length === 0) {
+        alert("No manga found for the current filter. Try different filters.");
+        return;
+      }
+
+      const random = filteredResults[Math.floor(Math.random() * filteredResults.length)];
+      setLuckyManga(random);
+      setResults([]); // clear regular search
+    } catch (err) {
+      console.error("Error fetching lucky manga:", err);
+      alert("Failed to get a filtered random manga. Try again!");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const random = filteredResults[Math.floor(Math.random() * filteredResults.length)];
-    setLuckyManga(random);
-    setResults([]); // clear regular search
-  } catch (err) {
-    console.error("Error fetching lucky manga:", err);
-    alert("Failed to get a filtered random manga. Try again!");
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-
-const isNSFW = (manga) => {
-  const nsfwTags = ["Hentai", "Ecchi", "Erotica", "Adult"];
-  return manga.genres.some((genre) => nsfwTags.includes(genre.name));
-};
-
-
-
+  const isNSFW = (manga) => {
+    const nsfwTags = ["Hentai", "Ecchi", "Erotica", "Adult"];
+    return manga.genres.some((genre) => nsfwTags.includes(genre.name));
+  };
 
   return (
     <div className="search-container">
@@ -253,83 +270,73 @@ const isNSFW = (manga) => {
         </button>
 
         <button
-  onClick={handleFeelingLucky}
-  className="lucky-button"
-  type="button"
->
-  🎲 I'm Feeling Lucky
-</button>
-
-
+          onClick={handleFeelingLucky}
+          className="lucky-button"
+          type="button"
+        >
+          🎲 I'm Feeling Lucky
+        </button>
       </div>
 
-     {luckyManga && (
-  <>
-    <h3 className="subtitle">
-      🎯 Lucky Manga
-      {selectedGenre && ` (Genre: ${genres.find(g => g.mal_id === Number(selectedGenre))
-?.name})`}
-      {selectedYear && ` | Year: ${selectedYear}`}
-      {sort && ` | Sort by: ${sort === "score" ? "Score" : "Popularity"}`}
-    </h3>
+      {luckyManga && (
+        <>
+          <h3 className="subtitle">
+            🎯 Lucky Manga
+            {selectedGenre && ` (Genre: ${genres.find(g => g.mal_id === Number(selectedGenre))?.name})`}
+            {selectedYear && ` | Year: ${selectedYear}`}
+            {sort && ` | Sort by: ${sort === "score" ? "Score" : "Popularity"}`}
+          </h3>
 
-    <div className="lucky-card-container">
-      {(!isNSFW(luckyManga) || isRevealed) ? (
-        <Link to={`/manga/${luckyManga.mal_id}`} className="lucky-card">
-          <div>
-            <div className="lucky-banner">🍀 Lucky Pick!</div>
-            <img
-              src={luckyManga.images.jpg.image_url}
-              alt={luckyManga.title}
-              className="lucky-image"
-            />
-            <p className="lucky-title">{luckyManga.title}</p>
-            {luckyManga.score && (
-              <p className="lucky-score">⭐ MAL Score: {luckyManga.score}</p>
+          <div className="lucky-card-container">
+            {(!isNSFW(luckyManga) || isRevealed) ? (
+              <Link to={`/manga/${luckyManga.mal_id}`} className="lucky-card">
+                <div>
+                  <div className="lucky-banner">🍀 Lucky Pick!</div>
+                  <img
+                    src={luckyManga.images.jpg.image_url}
+                    alt={luckyManga.title}
+                    className="lucky-image"
+                  />
+                  <p className="lucky-title">{luckyManga.title}</p>
+                  {luckyManga.score && (
+                    <p className="lucky-score">⭐ MAL Score: {luckyManga.score}</p>
+                  )}
+                </div>
+              </Link>
+            ) : (
+              <div className="lucky-card blurred">
+                <div className="lucky-banner">🍀 Lucky Pick!</div>
+                <img
+                  src={luckyManga.images.jpg.image_url}
+                  alt={luckyManga.title}
+                  className="lucky-image"
+                />
+                <p className="lucky-title">{luckyManga.title}</p>
+                {luckyManga.score && (
+                  <p className="lucky-score">⭐ MAL Score: {luckyManga.score}</p>
+                )}
+              </div>
+            )}
+
+            {isNSFW(luckyManga) && !isRevealed && (
+              <button className="reveal-button" onClick={() => setIsRevealed(true)}>
+                Warning! NSFW content. Click to proceed 🔞
+              </button>
             )}
           </div>
-        </Link>
-      ) : (
-        <div className="lucky-card blurred">
-          <div className="lucky-banner">🍀 Lucky Pick!</div>
-          <img
-            src={luckyManga.images.jpg.image_url}
-            alt={luckyManga.title}
-            className="lucky-image"
-          />
-          <p className="lucky-title">{luckyManga.title}</p>
-          {luckyManga.score && (
-            <p className="lucky-score">⭐ MAL Score: {luckyManga.score}</p>
-          )}
-        </div>
+        </>
       )}
-
-      {isNSFW(luckyManga) && !isRevealed && (
-        <button className="reveal-button" onClick={() => setIsRevealed(true)}>
-          Warning! NSFW content. Click to proceed 🔞
-        </button>
-      )}
-    </div>
-  </>
-)}
-
-
-
-
-
-
 
       {(results.length > 0 || loading) && (
         <>
           <h3 className="subtitle">
-  Results{" "}
-  {activeSearchTerm
-    ? `for "${activeSearchTerm}"`
-    : selectedGenre || selectedYear || sort
-    ? "based on filters"
-    : ""}
-</h3>
-
+            Results{" "}
+            {activeSearchTerm
+              ? `for "${activeSearchTerm}"`
+              : selectedGenre || selectedYear || sort
+              ? "based on filters"
+              : ""}
+          </h3>
 
           {loading && <p>Loading...</p>}
 
